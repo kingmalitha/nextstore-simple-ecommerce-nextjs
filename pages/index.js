@@ -1,5 +1,21 @@
+import { useEffect, useState } from "react";
+
 /* eslint-disable @next/next/no-img-element */
 export default function Home() {
+  const [productsInfo, setProductsInfo] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/products")
+      .then((response) => response.json())
+      .then((json) => setProductsInfo(json));
+  }, []);
+
+  //! Note: To remove duplicates, we use new Set()
+  const categoriesNames = [
+    ...new Set(productsInfo.map((product) => product.category)),
+  ];
+  console.log(categoriesNames);
+
   return (
     <div className="p-5 ">
       <div>

@@ -1,47 +1,63 @@
-import { useEffect, useState } from "react";
+import Product from "@/components/Product";
+import { initMongoose } from "@/lib/mongoose";
+import { useState } from "react";
+import { findAllProducts } from "./api/products";
 
 /* eslint-disable @next/next/no-img-element */
-export default function Home() {
-  const [productsInfo, setProductsInfo] = useState([]);
-
-  useEffect(() => {
-    fetch("/api/products")
-      .then((response) => response.json())
-      .then((json) => setProductsInfo(json));
-  }, []);
+export default function Home({ products }) {
+  const [searchPharse, setSearchPharse] = useState("");
 
   //! Note: To remove duplicates, we use new Set()
   const categoriesNames = [
-    ...new Set(productsInfo.map((product) => product.category)),
+    ...new Set(products.map((product) => product.category)),
   ];
-  console.log(categoriesNames);
+
+  if (searchPharse) {
+    products = products.filter((p) =>
+      p.name.toLowerCase().includes(searchPharse.toLowerCase())
+    );
+  }
 
   return (
     <div className="p-5 ">
+      <input
+        type="text"
+        onChange={(e) => setSearchPharse(e.target.value)}
+        placeholder="Search for Products..."
+        className="bg-gray-100 w-full py-2 px-4 rounded-xl "
+      />
       <div>
-        <h2 className="text-2xl ">Mobiles</h2>
-        <div className="py-4">
-          <div className="w-64">
-            <div className="bg-blue-100 p-5 rounded-xl ">
-              <img src="/products/iphone.png" alt="" />
-            </div>
-            <div className="mt-2">
-              <h3 className="font-bold text-lg">Iphone 14 Pro</h3>
-            </div>
-            <p className="text-sm mt-1 leading-4">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos
-              laboriosam animi sit inventore veniam impedit similique maxime
-              officiis quam saepe!
-            </p>
-            <div className="flex mt-1 ">
-              <div className="text-2xl font-bold grow">$899</div>
-              <button className="bg-emerald-400 text-white py-1 px-3 rounded-xl">
-                +
-              </button>
-            </div>
+        {categoriesNames.map((categoryName) => (
+          <div key={categoryName}>
+            {products.find((product) => product.category === categoryName) && (
+              <div>
+                <h2 className="text-2xl capitalize py-5">{categoryName}</h2>
+                <div className="flex -mx-5 overflow-x-scroll snap-start scrollbar-hide">
+                  {products
+                    .filter((product) => product.category === categoryName)
+                    .map((productInfo) => (
+                      <div key={productInfo._id} className="px-5">
+                        <Product {...productInfo} />
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
           </div>
-        </div>
+        ))}
+
+        <div className="py-4"></div>
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps() {
+  await initMongoose();
+  const products = await findAllProducts();
+  return {
+    props: {
+      products: JSON.parse(JSON.stringify(products)),
+    },
+  };
 }

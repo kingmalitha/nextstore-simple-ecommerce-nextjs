@@ -1,7 +1,9 @@
 import Product from "@/components/Product";
+import Footer from "@/components/Footer";
 import { initMongoose } from "@/lib/mongoose";
 import { useState } from "react";
 import { findAllProducts } from "./api/products";
+import Layout from "@/components/Layout";
 
 /* eslint-disable @next/next/no-img-element */
 export default function Home({ products }) {
@@ -19,7 +21,7 @@ export default function Home({ products }) {
   }
 
   return (
-    <div className="p-5 ">
+    <Layout>
       <input
         type="text"
         onChange={(e) => setSearchPharse(e.target.value)}
@@ -48,7 +50,7 @@ export default function Home({ products }) {
 
         <div className="py-4"></div>
       </div>
-    </div>
+    </Layout>
   );
 }
 

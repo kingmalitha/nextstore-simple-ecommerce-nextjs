@@ -1,38 +1,48 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# NextStore
 
-## Getting Started
+NextStore is a simple ecommerce app built with Next.js, MongoDB, and Stripe. It allows users to add items to their cart and checkout, with the ability to increase or decrease the quantity of their items.
 
-First, run the development server:
+![Skills used](https://skillicons.dev/icons?i=git,github,next,tailwind,mongodb,vercel,)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## 🔰Technologies Used
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Next.js**: A React-based framework for building server-side rendered (SSR) web applications.
+- **MongoDB**: A NoSQL database used to store product data.
+- **Stripe**: A payment processing platform used for checkout.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## 🔰Features
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+- Search products across different categories
+- Add products to cart
+- Increase or decrease quantity of items in cart
+- Checkout using Stripe
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## 🔰Getting Started
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+To get started with NextStore, follow these steps:
 
-## Learn More
+1. Clone the repo: `git clone https://github.com/kingmalitha/nextstore-simple-ecommerce-nextjs.git`
+2. Install dependencies: `npm install`
+3. Configure environment variables:
+   - Create a `.env` file in the root of the project
+   - Add the following variables and their corresponding values:
+     - `STRIPE_PUBLIC_KEY`: Your Stripe public key
+     - `STRIPE_SECRET_KEY`: Your Stripe secret key
+     - `STRIPE_SIGNNING_KEY`: Your Stripe signing key get by using Stripe CLI
+     - `MONGODB_URI`: Your MongoDB URI
+4. Start the development server: `npm run dev`
+5. Open your browser and navigate to `http://localhost:3000`
 
-To learn more about Next.js, take a look at the following resources:
+## 🔰Screenshots
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+![Homepage](/public/github_markdown/homepage.png)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+![Cart](/public/github_markdown/cart.png)
 
-## Deploy on Vercel
+![Checkout](/public/github_markdown/checkout.png)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+![Homepage](/public/github_markdown/homepage_after.png)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## 🔰Conclusion
+
+NextStore is a simple ecommerce app that demonstrates the basics of building a functional online store using Next.js, MongoDB, and Stripe. With some additional features and improvements, it could be a great starting point for building a more advanced ecommerce site.

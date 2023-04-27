@@ -1,4 +1,5 @@
 import { initMongoose } from "@/lib/mongoose";
+import Order from "@/models/order";
 import Product from "@/models/product";
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
@@ -6,6 +7,7 @@ export default async function handler(req, res) {
   await initMongoose();
   if (req.method === "POST") {
     try {
+      const { email, name, address, city } = req.body;
       const productsIds = req.body.products.split(",");
       const uniqIds = [...new Set(productsIds)];
       const products = await Product.find({ _id: { $in: uniqIds } }).exec();
@@ -23,13 +25,24 @@ export default async function handler(req, res) {
           },
         });
       }
+      const order = await Order.create({
+        products: line_items,
+        name,
+        email,
+        address,
+        city,
+        paid: 0,
+      });
 
       const session = await stripe.checkout.sessions.create({
         line_items: line_items,
         mode: "payment",
+        customer_email: email,
         success_url: `${req.headers.origin}/?success=true`,
         cancel_url: `${req.headers.origin}/?canceled=true`,
+        metadata: { orderId: order._id.toString() },
       });
+
       res.redirect(303, session.url);
     } catch (err) {
       res.status(err.statusCode || 500).json(err.message);
@@ -39,32 +52,3 @@ export default async function handler(req, res) {
     res.status(405).end("Method Not Allowed");
   }
 }
-
-// const checkoutHandler = async (req, res) => {
-//   await initMongoose();
-
-//   if (req.method !== "POST") {
-//     res.body("Should be a POST request, but it is not").send();
-//     return;
-//   }
-
-//   const productsIds = req.body.products.split(",");
-//   const uniqIds = [...new Set(productsIds)];
-//   const products = await Product.find({ _id: { $in: uniqIds } }).exec();
-
-//   const session = await stripe.checkout.sessions.create({
-//     line_items: [
-//       {
-//         // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-//         price: "{{PRICE_ID}}",
-//         quantity: 1,
-//       },
-//     ],
-//     mode: "payment",
-//     success_url: `${req.headers.origin}/?success=true`,
-//     cancel_url: `${req.headers.origin}/?canceled=true`,
-//   });
-//   res.redirect(303, session.url);
-// };
-
-// export default checkoutHandler;
